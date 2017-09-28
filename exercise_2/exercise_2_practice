@@ -1,0 +1,90 @@
+//*Try out these queries on eon your personal database when it is completed*/
+/* types of SQL statements -- simple and not so simple*/
+
+/*select a field or fields from a single table with a where clause*/
+/*= > < between and or not is /is not NULL*/
+
+select au_lname,au_fname from authors where state="CA";
+select address, city, postalcode from authors where postalcode > 94000;
+select title_id, title, total_sales from titles where total_sales > 2000;
+select title_id, title, total_sales from titles where total_sales between 2000 and 10000;
+select * from titleauthor where title_id="MC3021";
+select pub_id, pub_name from publishers where city = "New York";
+select stor_id, lowqty, highqty, discount from discounts where discounttype="Initial Customer" and lowqty is not NULL;
+select * from customer_sales where rating > 4 or qty > 600;
+select * from pending_orders where qty>400 and not fulfilled;
+select title_id,title,type from titles where type='thriller' or type='fiction' and total_sales is not NULL;
+select title_id,title,type from titles where (type='thriller' or type='fiction') and total_sales is not NULL;
+
+/* select count, select distinct, select distinct count */
+
+select count(*) from salesdetail;
+select count(stor_id) from salesdetail;
+select distinct count(stor_id) from salesdetail;
+select distinct stor_id from salesdetail;
+select count(distinct stor_id) from salesdetail;
+
+/* aggregations and arithmetic functions: max, min, avg, rand */
+select max(price) from titles where type='business';
+select min(price)from titles where type='fiction';
+select avg(qty) from customer_sales;
+set @rand_test=RAND();
+select @rand_test;
+
+/* aliases - give a distinctive name to the output with aggregations*/
+select max(rating) as "best review", min(rating) as "worst review", avg(rating) as "average review" from reviews;
+
+/* when selecting a scalar value (e.g. title_id) and an aggregate (e.g. average price) you need to group by*/
+select type, avg(price) from titles group by type;
+select type, max(price) from titles group by type;
+/* add additional conditions on the group by with 'having'*/
+select pub_id,avg(price) as "average_title_price" from titles group by pub_id having count(*) >=6;
+
+/* matching substrings with like and REGEXP */
+select au_lname,au_fname from authors where au_lname like 'Yok%';
+select au_lname,au_fname from authors where au_lname like '%ley';
+select au_id, title_id from blurbs where copy like '%wild%';
+select au_lname,au_fname from authors where au_lname like '______';
+select au_lname,au_fname from authors where au_lname REGEXP '^H';
+select au_id, title_id from blurbs where copy REGEXP 'dea';
+select au_lname,au_fname from authors where au_lname REGEXP '^H';
+select au_lname,au_fname from authors where au_lname REGEXP 'er$';
+
+/* sorted output: order by*/
+select * from store_inventories order by title_id;
+select * from sales order by stor_id, ord_num;
+
+/* 'in' operator with lists
+select * from store_inventories where stor_id in ('9283', '9333','9678');
+
+/* subqueries take a result set from one table and apply it to a query on another table*/
+select stor_id, title_id, qty from store_inventories where title_id=(select title_id from titles where title like '%Cater%');
+/* this works because the subquery returns only one value to the outer query. Otherwise, most often, use 'in'*/
+select title_id from titles where price=(select max(price) from titles); /*notice using same table in primary query and subquery*/
+/*this one uses 'in' since subquery returns multiple values*/
+select stor_id, title_id, qty from salesdetail where title_id in (select title_id from titles where type='fiction');
+/* compare 2 tables on a certain field -- I use this type to test referential integrity, should produce null output*/
+select title_id from salesdetail where title_id not in(select title_id from titles);
+/*nested subqueries*/
+select stor_id, title_id, qty from salesdetail where title_id in (select title_id from titles where price=(select max(price) from titles));
+
+/*joins -- queries comparing the values of related fields in two or more tables*/
+/* transact SQL join syntax does not explicitly state the join
+select stor_name, ord_num from stores, salesdetail where salesdetail.stor_id = stores.stor_id;
+select title, pub_name from titles, publishers where titles.pub_id=publishers.pub_id;
+
+/*ANSI standard syntax explicitly state the join 'on' and may use aliases for the table names*/
+select sales.* from sales left join salesdetail on sales.ord_num=salesdetail.ord_num where salesdetail.title_id="PC8888"; 
+ select a.au_lname,a.au_fname, t.title from authors a inner join titleauthor ta on a.au_id=ta.au_id inner join titles t on t.title_id=ta.title_id;
+
+/*complex queries using several different functions and operators*/
+select pub_id,avg(price) as "average_title_price" from titles group by pub_id having count(*) >=6;
+select type from titles where  total_sales > (select max(qty) from salesdetail, titles where titles.title_id = salesdetail.title_id );
+select pub_name from publishers where pub_id in (select pub_id from titles where pubdate in (select max(pubdate) from titles));
+select au_id, sum(qty) from salesdetail, titleauthor where titleauthor.title_id = salesdetail.title_id group by au_id;
+select min(price) as "least expensive", max(price) as "most_expensive", type from titles group by type;
+select stor_id,avg(discount) as "average_of_discount" from salesdetail group by stor_id having count(*) >7;
+select  discount, count(*) from salesdetail group by discount;
+select stor_name from stores where stor_id in (select stor_id from salesdetail where discount > 50);
+select * from titleauthor where au_id = (select au_id from authors where au_fname like 'a%' limit 1);
+select ord_num from salesdetail where qty > (select max(qty) from salesdetail,sales where salesdetail.stor_id = sales.stor_id and title_id = "BU2075") ;

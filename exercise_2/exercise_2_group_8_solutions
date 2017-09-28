@@ -1,0 +1,129 @@
+1)  Display the rating and content of the review of the title id 'BU1032'.
+    
+    select rating, content from reviews where title_id='BU1032';
+
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| rating | content                                                                                                                                                                                                                                                                                                                                       |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|      2 | The book content is good but the price is absurd. You can find all of this information online for free, or if you want it condensed in a book, find a cheaper   alternative. I was able to find similar content in other used database textbooks for $10. I'm upset because I would have kept this book if not for that absurd/insulting price. |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+2)  List the store id and title id for pending orders that are not yet fulfilled.
+
+    select stor_id, title_id from pending_orders where not fulfilled;
+
++---------+----------+
+| stor_id | title_id |
++---------+----------+
+| 5023    | BU1032   |
+| 5023    | PC8888   |
+| 7896    | TC7777   |
+| 9012    | AK1231   |
+| 5023    | FI1230   |
+| 5023    | th1218   |
+| 5023    | SM1836   |
+| 8042    | TC7777   |
+| 6380    | TC7777   |
+| 9678    | TC7777   |
+| 9678    | TC7777   |
+| 8042    | TH1217   |
++---------+----------+
+
+3)  How many different titles appear in the store_inventories table? Identify the output with an "as" clause.
+    
+    select count(distinct title_id) as 'Number of Different Titles' from store_inventories;
+
++----------------------------+
+| Number of Different Titles |
++----------------------------+
+|                         56 |
++----------------------------+
+
+4)  What are the 5 most expensive computer books in titles? Use order by desc, limit.
+
+    select title, price from titles where type like '%comp%' order by price desc limit 5;
+
++--------------------------------------+-------+
+| title                                | price |
++--------------------------------------+-------+
+| Introduction to python               | 29.99 |
+| But Is It User Friendly?             | 22.95 |
+| Secrets of Silicon Valley            | 20.00 |
+| Object-Oriented Software Engineering | 15.99 |
+| Net Etiquette                        | 11.25 |
++--------------------------------------+-------+
+
+5)  What is the average size of order for a single title in salesdetail? Identify the output with an "as" clause.
+
+    
+6)  Show which books are stocked by the most stores in store_inventories in descending order.
+
+    select title, sum(qty) from titles, store_inventories where titles.title_id = store_inventories.title_id group by title order by sum(qty) desc;
+
++-----------------------------------------------------------------+----------+
+| title                                                           | sum(qty) |
++-----------------------------------------------------------------+----------+
+| The Very Hungry Caterpillar                                     |    47139 |
+| Where the Wild Things Are                                       |    43401 |
+| The Gourmet Microwave                                           |    22261 |
+| Object-Oriented Software Engineering                            |    19785 |
+| You Can Combat Computer Stress!                                 |    15761 |
+| Fifty Years in Buckingham Palace Kitchens                       |    15124 |
+| Introduction to python                                          |    13396 |
+| Sushi, Anyone?                                                  |    12889 |
+| But Is It User Friendly?                                        |     8875 |
+| Straight Talk About Computers                                   |     4180 |
+| Prolonged Data Deprivation: Four Case Studies                   |     4121 |
+| Cooking with Computers: Surreptitious Balance Sheets            |     3934 |
+| Emotional Security: A New Algorithm                             |     3395 |
+| The Girl in the Spider's Web                                    |     2370 |
+| Silicon Valley Gastronomic Treats                               |     2102 |
+| Is Anger the Enemy?                                             |     2100 |
+| Grey: Fifty Shades of Grey as Told by Christian                 |      720 |
+| Four Seasons in Rome                                            |      700 |
+| The Power of I Am: Two Words That Will Change Your Life Today   |      590 |
+| Lord of the Flies                                               |      468 |
+| Computer Phobic and Non-Phobic Individuals: Behavior Variations |      424 |
+| Killing Killer Bees                                             |      410 |
+| Onions, Leeks, and Garlic: Cooking Secrets of the Mediterranean |      385 |
+| Algorithms in Board Games                                       |      371 |
+| Planet Eating Dogs versus Planet Eating Cats                    |      200 |
+| Life Without Fear                                               |      169 |
+| The Goldfinch                                                   |       95 |
+| The Little Friend                                               |       93 |
+| Net Etiquette                                                   |       82 |
+| Fly Away                                                        |       75 |
+| Girl On The Train                                               |       75 |
+| The Husband's Secret                                            |       75 |
+| Der Sündenfall von Wilmslow                                     |       74 |
+| The Keeper                                                      |       70 |
+| Silent Witness: A Josie Bates Thriller                          |       69 |
+| Angel Falls: A Novel                                            |       62 |
+| Verschwörung                                                    |       59 |
+| Big Little Lies                                                 |       59 |
+| About Grace                                                     |       52 |
+| The Girl on the Train                                           |       52 |
+| Fifty Shades of Grey                                            |       51 |
+| Alaskan Dawn                                                    |       50 |
+| The Girl You Left Behind                                        |       49 |
+| Memory Man                                                      |       48 |
+| The Secret History                                              |       44 |
+| The Psychology of Computer Cooking                              |       42 |
+| The Money Goddess: The Financial Guide For Women                |       42 |
+| Fifty Shades Darker                                             |       41 |
+| After You                                                       |       40 |
+| All The Light We Cannot See                                     |       39 |
+| The One You Love                                                |       28 |
+| Meant to Be                                                     |       15 |
+| The One You Trust                                               |       14 |
+| The Nightingale                                                 |       10 |
+| The Busy Executive's Database Guide                             |    -2236 |
+| Secrets of Silicon Valley                                       |    -5945 |
++-----------------------------------------------------------------+----------+
+
+
+7) List the actual titles from titles table (if any) which are not stocked by any bookstore. Explain output
+with "as" clause.
+8) List the actual titles and quantities for all books carried by store 'Paperbacked'. Use a join.
+9) Show which authors by first and last name wrote the most books from most to least (descending order,
+use titleauthor). Use a join.
