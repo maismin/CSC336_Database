@@ -1,6 +1,8 @@
 1)  Display the rating and content of the review of the title id 'BU1032'.
     
-    select rating, content from reviews where title_id='BU1032';
+    SELECT rating, content 
+    FROM reviews
+    WHERE title_id='BU1032';
 
 +--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | rating | content                                                                                                                                                                                                                                                                                                                                       |
@@ -10,7 +12,9 @@
 
 2)  List the store id and title id for pending orders that are not yet fulfilled.
 
-    select stor_id, title_id from pending_orders where not fulfilled;
+    SELECT stor_id, title_id 
+    FROM pending_orders 
+    WHERE NOT fulfilled;
 
 +---------+----------+
 | stor_id | title_id |
@@ -31,7 +35,8 @@
 
 3)  How many different titles appear in the store_inventories table? Identify the output with an "as" clause.
     
-    select count(distinct title_id) as 'Number of Different Titles' from store_inventories;
+    SELECT count(distinct title_id) AS 'Number of Different Titles' 
+    FROM store_inventories;
 
 +----------------------------+
 | Number of Different Titles |
@@ -41,7 +46,11 @@
 
 4)  What are the 5 most expensive computer books in titles? Use order by desc, limit.
 
-    select title, price from titles where type like '%comp%' order by price desc limit 5;
+    SELECT title, price 
+    FROM titles 
+    WHERE type LIKE '%comp%' 
+    ORDER BY price DESC 
+    LIMIT 5;
 
 +--------------------------------------+-------+
 | title                                | price |
@@ -55,75 +64,179 @@
 
 5)  What is the average size of order for a single title in salesdetail? Identify the output with an "as" clause.
 
+    SELECT AVG(qty) AS 'Average Order for a Single Title'
+    FROM salesdetail;
+
++----------------------------------+
+| Average Order for a Single Title |
++----------------------------------+
+|                         829.4725 |
++----------------------------------+
     
 6)  Show which books are stocked by the most stores in store_inventories in descending order.
 
-    select title, sum(qty) from titles, store_inventories where titles.title_id = store_inventories.title_id group by title order by sum(qty) desc;
+    SELECT  title AS Title, 
+            sum(qty) AS 'Number Stocked'
+    FROM titles, store_inventories 
+    WHERE titles.title_id = store_inventories.title_id 
+    GROUP BY title 
+    ORDER BY sum(qty) DESC;
 
-+-----------------------------------------------------------------+----------+
-| title                                                           | sum(qty) |
-+-----------------------------------------------------------------+----------+
-| The Very Hungry Caterpillar                                     |    47139 |
-| Where the Wild Things Are                                       |    43401 |
-| The Gourmet Microwave                                           |    22261 |
-| Object-Oriented Software Engineering                            |    19785 |
-| You Can Combat Computer Stress!                                 |    15761 |
-| Fifty Years in Buckingham Palace Kitchens                       |    15124 |
-| Introduction to python                                          |    13396 |
-| Sushi, Anyone?                                                  |    12889 |
-| But Is It User Friendly?                                        |     8875 |
-| Straight Talk About Computers                                   |     4180 |
-| Prolonged Data Deprivation: Four Case Studies                   |     4121 |
-| Cooking with Computers: Surreptitious Balance Sheets            |     3934 |
-| Emotional Security: A New Algorithm                             |     3395 |
-| The Girl in the Spider's Web                                    |     2370 |
-| Silicon Valley Gastronomic Treats                               |     2102 |
-| Is Anger the Enemy?                                             |     2100 |
-| Grey: Fifty Shades of Grey as Told by Christian                 |      720 |
-| Four Seasons in Rome                                            |      700 |
-| The Power of I Am: Two Words That Will Change Your Life Today   |      590 |
-| Lord of the Flies                                               |      468 |
-| Computer Phobic and Non-Phobic Individuals: Behavior Variations |      424 |
-| Killing Killer Bees                                             |      410 |
-| Onions, Leeks, and Garlic: Cooking Secrets of the Mediterranean |      385 |
-| Algorithms in Board Games                                       |      371 |
-| Planet Eating Dogs versus Planet Eating Cats                    |      200 |
-| Life Without Fear                                               |      169 |
-| The Goldfinch                                                   |       95 |
-| The Little Friend                                               |       93 |
-| Net Etiquette                                                   |       82 |
-| Fly Away                                                        |       75 |
-| Girl On The Train                                               |       75 |
-| The Husband's Secret                                            |       75 |
-| Der Sündenfall von Wilmslow                                     |       74 |
-| The Keeper                                                      |       70 |
-| Silent Witness: A Josie Bates Thriller                          |       69 |
-| Angel Falls: A Novel                                            |       62 |
-| Verschwörung                                                    |       59 |
-| Big Little Lies                                                 |       59 |
-| About Grace                                                     |       52 |
-| The Girl on the Train                                           |       52 |
-| Fifty Shades of Grey                                            |       51 |
-| Alaskan Dawn                                                    |       50 |
-| The Girl You Left Behind                                        |       49 |
-| Memory Man                                                      |       48 |
-| The Secret History                                              |       44 |
-| The Psychology of Computer Cooking                              |       42 |
-| The Money Goddess: The Financial Guide For Women                |       42 |
-| Fifty Shades Darker                                             |       41 |
-| After You                                                       |       40 |
-| All The Light We Cannot See                                     |       39 |
-| The One You Love                                                |       28 |
-| Meant to Be                                                     |       15 |
-| The One You Trust                                               |       14 |
-| The Nightingale                                                 |       10 |
-| The Busy Executive's Database Guide                             |    -2236 |
-| Secrets of Silicon Valley                                       |    -5945 |
-+-----------------------------------------------------------------+----------+
++-----------------------------------------------------------------+----------------+
+| Title                                                           | Number Stocked |
++-----------------------------------------------------------------+----------------+
+| The Very Hungry Caterpillar                                     |          47139 |
+| Where the Wild Things Are                                       |          43401 |
+| The Gourmet Microwave                                           |          22261 |
+| Object-Oriented Software Engineering                            |          19785 |
+| You Can Combat Computer Stress!                                 |          15761 |
+| Fifty Years in Buckingham Palace Kitchens                       |          15124 |
+| Introduction to python                                          |          13396 |
+| Sushi, Anyone?                                                  |          12889 |
+| But Is It User Friendly?                                        |           8875 |
+| Straight Talk About Computers                                   |           4180 |
+| Prolonged Data Deprivation: Four Case Studies                   |           4121 |
+| Cooking with Computers: Surreptitious Balance Sheets            |           3934 |
+| Emotional Security: A New Algorithm                             |           3395 |
+| The Girl in the Spider's Web                                    |           2370 |
+| Silicon Valley Gastronomic Treats                               |           2102 |
+| Is Anger the Enemy?                                             |           2100 |
+| Grey: Fifty Shades of Grey as Told by Christian                 |            720 |
+| Four Seasons in Rome                                            |            700 |
+| The Power of I Am: Two Words That Will Change Your Life Today   |            590 |
+| Lord of the Flies                                               |            468 |
+| Computer Phobic and Non-Phobic Individuals: Behavior Variations |            424 |
+| Killing Killer Bees                                             |            410 |
+| Onions, Leeks, and Garlic: Cooking Secrets of the Mediterranean |            385 |
+| Algorithms in Board Games                                       |            371 |
+| Planet Eating Dogs versus Planet Eating Cats                    |            200 |
+| Life Without Fear                                               |            169 |
+| The Goldfinch                                                   |             95 |
+| The Little Friend                                               |             93 |
+| Net Etiquette                                                   |             82 |
+| Fly Away                                                        |             75 |
+| Girl On The Train                                               |             75 |
+| The Husband's Secret                                            |             75 |
+| Der Sündenfall von Wilmslow                                     |             74 |
+| The Keeper                                                      |             70 |
+| Silent Witness: A Josie Bates Thriller                          |             69 |
+| Angel Falls: A Novel                                            |             62 |
+| Big Little Lies                                                 |             59 |
+| Verschwörung                                                    |             59 |
+| About Grace                                                     |             52 |
+| The Girl on the Train                                           |             52 |
+| Fifty Shades of Grey                                            |             51 |
+| Alaskan Dawn                                                    |             50 |
+| The Girl You Left Behind                                        |             49 |
+| Memory Man                                                      |             48 |
+| The Secret History                                              |             44 |
+| The Psychology of Computer Cooking                              |             42 |
+| The Money Goddess: The Financial Guide For Women                |             42 |
+| Fifty Shades Darker                                             |             41 |
+| After You                                                       |             40 |
+| All The Light We Cannot See                                     |             39 |
+| The One You Love                                                |             28 |
+| Meant to Be                                                     |             15 |
+| The One You Trust                                               |             14 |
+| The Nightingale                                                 |             10 |
+| The Busy Executive's Database Guide                             |          -2236 |
+| Secrets of Silicon Valley                                       |          -5945 |
++-----------------------------------------------------------------+----------------+
 
+7)	List the actual titles from titles table (if any) which are not stocked by any bookstore. Explain output with "as" clause.
 
-7) List the actual titles from titles table (if any) which are not stocked by any bookstore. Explain output
-with "as" clause.
-8) List the actual titles and quantities for all books carried by store 'Paperbacked'. Use a join.
-9) Show which authors by first and last name wrote the most books from most to least (descending order,
+    SELECT title AS 'Titles Not Stocked' 
+    FROM titles 
+    WHERE title NOT IN (
+      SELECT DISTINCT title 
+      FROM titles t 
+      INNER JOIN store_inventories si ON t.title_id = si.title_id 
+    );
+
++-------------------------------------------------------+
+| Titles Not Stocked                                    |
++-------------------------------------------------------+
+| Long Time Coming                                      |
+| Me Before You                                         |
+| What Alice Forgot                                     |
+| You Can, You Will: 8 Undeniable Qualities of a Winner |
+| The One You Fear                                      |
+| The Guilty                                            |
+| Priviledged Witness: A Josie Bates Thriller           |
+| Hostile Witness: A Josie Bates Thriller               |
++-------------------------------------------------------+
+
+8)	List the actual titles and quantities for all books carried by store 'Paperbacked'. Use a join.
+
+    SELECT title, qty 
+    FROM stores s 
+    INNER JOIN store_inventories si ON s.stor_id = si.stor_id 
+    INNER JOIN titles t ON t.title_id = si.title_id 
+    WHERE stor_name = 'Paperbacked';
+
++-----------------------------------------------------------------+-----+
+| title                                                           | qty |
++-----------------------------------------------------------------+-----+
+| The Money Goddess: The Financial Guide For Women                |  42 |
+| The Secret History                                              |  44 |
+| Angel Falls: A Novel                                            |  62 |
+| Meant to Be                                                     |  15 |
+| After You                                                       |  40 |
+| Computer Phobic and Non-Phobic Individuals: Behavior Variations |  49 |
+| Lord of the Flies                                               |  69 |
+| Killing Killer Bees                                             |   5 |
+| Onions, Leeks, and Garlic: Cooking Secrets of the Mediterranean |  10 |
+| Fifty Years in Buckingham Palace Kitchens                       |  28 |
+| Sushi, Anyone?                                                  |  49 |
++-----------------------------------------------------------------+-----+
+
+9)	Show which authors by first and last name wrote the most books from most to least (descending order,
 use titleauthor). Use a join.
+
+    SELECT  au_fname AS 'First Name', 
+            au_lname AS 'Last Name', 
+            COUNT(*) AS 'Number of Books Written'
+    FROM authors a 
+    INNER JOIN titleauthor ta ON a.au_id = ta.au_id 
+    GROUP BY ta.au_id 
+    ORDER BY COUNT(*) DESC;
+
++-------------+----------------+-------------------------+
+| First Name  | Last Name      | Number of Books Written |
++-------------+----------------+-------------------------+
+| Chastity    | Locksley       |                       4 |
+| Anthony     | Doerr          |                       3 |
+| Jojo        | Moyes          |                       3 |
+| David       | Lagercrantz    |                       3 |
+| Paul        | Pilkington     |                       3 |
+| Kristin     | Hannah         |                       3 |
+| David       | Baldacci       |                       3 |
+| E.L.        | James          |                       3 |
+| Michael     | O'Leary        |                       3 |
+| Donna       | Tartt          |                       3 |
+| Albert      | Ringer         |                       3 |
+| Paula       | Hawkins        |                       3 |
+| Liane       | Moriarty       |                       3 |
+| Rebecca     | Forster        |                       3 |
+| Edie        | Claire         |                       3 |
+| Anne        | Ringer         |                       3 |
+| Marjorie    | Green          |                       2 |
+| Dick        | Straight       |                       2 |
+| Johnson     | White          |                       2 |
+| Stearns     | MacFeather     |                       2 |
+| Sheryl      | Hunter         |                       1 |
+| Dirk        | Stringer       |                       1 |
+| Reginald    | Blotchet-Halls |                       1 |
+| Akiko       | Yokomoto       |                       1 |
+| Michel      | DeFrance       |                       1 |
+| Heather     | McBadden       |                       1 |
+| Meander     | Smith          |                       1 |
+| Ann         | Dull           |                       1 |
+| Cheryl      | Carson         |                       1 |
+| Morningstar | Greene         |                       1 |
+| Innes       | del Castillo   |                       1 |
+| Abraham     | Bennet         |                       1 |
+| Livia       | Karsen         |                       1 |
+| Sylvia      | Panteley       |                       1 |
+| Burt        | Gringlesby     |                       1 |
++-------------+----------------+-------------------------+
